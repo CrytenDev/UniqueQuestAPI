@@ -25,6 +25,7 @@ public class MainClass extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new QuestListeners(), this);
 		this.saveDefaultConfig();
 		this.getCommand("quest").setExecutor(new QuestCommand());
+
 	}
 	
 	public void onDisable() {
