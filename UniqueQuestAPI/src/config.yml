@@ -1,0 +1,7 @@
+MySQL:
+  Host: 127.0.0.1
+  Port: 3306
+  Database: "yourDatabase"
+  Username: "yourUsername"
+  Password: "yourPassword"
+  Poolsize: 100

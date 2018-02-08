@@ -1,0 +1,7 @@
+name: UniqueQuestAPI
+version: 2.0
+author: Cryten
+main: de.cryten.MainClass
+
+commands:
+  quest:
