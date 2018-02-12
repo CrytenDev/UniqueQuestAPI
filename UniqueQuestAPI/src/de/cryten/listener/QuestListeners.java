@@ -50,18 +50,14 @@ public class QuestListeners implements Listener {
 	
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent e) {
-
 		ItemStack item = e.getCurrentItem();
-
 		if (item == null || item.getType() == null || item.getType() == Material.AIR)
 			return;
-
 		if (QuestInvCommand.inv != null && e.getInventory().getName().equals(QuestInvCommand.inv.getName())) {
 			e.setCancelled(true);
 		}
 	}
 
-	
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) {
 		Player p = e.getPlayer();
@@ -89,8 +85,6 @@ public class QuestListeners implements Listener {
 						sql.addCoins(p.getUniqueId(), sql.getReward(i));
 					}
 				}
-
-
 			}
 		}
 	}
@@ -176,8 +170,7 @@ public class QuestListeners implements Listener {
 							
 							sql.setKillProgress(p.getUniqueId(), i);
 							p.sendMessage("§l§6Quest: §2" + sql.getQuestName(i) + " §6- §6" + sql.getKillProgress(p.getUniqueId(), i) + "/" + sql.getKillCounter(i));
-							//ActionBar.sendActionText(p, "§l§6Quest: §2" + sql.getQuestName(i) + " §6- §e" + sql.getKillProgress(p.getUniqueId(), i) + "/" + sql.getKillCounter(i), 3);
-							
+							//ActionBar.sendActionText(p, "§l§6Quest: §2" + sql.getQuestName(i) + " §6- §e" + sql.getKillProgress(p.getUniqueId(), i) + "/" + sql.getKillCounter(i), 3);	
 						}
 						if(sql.getKillProgress(p.getUniqueId(), i) == sql.getKillCounter(i) && sql.getKillCounter(i) != 0) {
 
