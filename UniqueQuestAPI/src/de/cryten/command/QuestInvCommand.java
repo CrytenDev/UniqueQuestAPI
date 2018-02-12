@@ -44,8 +44,7 @@ public class QuestInvCommand implements CommandExecutor {
     				+ "&& UUID = '"+ p.getUniqueId() +"';")) {
 				
 	            while(rs.next()) {
-                	@SuppressWarnings("deprecation")
-					ItemStack s = new ItemStack(Material.getMaterial(sql.getItemID(rs.getInt("QUESTID"))));
+					ItemStack s = new ItemStack(sql.getMaterialName(rs.getInt("QUESTID")));
 
                 	if(rs.getInt("VALUE") == 0 && rs.getInt("GATHER") == 0 && rs.getInt("PLAYERTOKILL") == 0 && rs.getInt("KILLTRACKER") < rs.getInt("KILLCOUNTER")) {
 						String[] questext = rs.getString("QUESTTEXT").split("\\|", -1);
@@ -116,7 +115,7 @@ public class QuestInvCommand implements CommandExecutor {
 						s.setItemMeta(itemmeta);
                 	}
                 	
-                	if(rs.getInt("VALUE") == 0 && rs.getInt("PLAYERTOKILL") == 0 && rs.getInt("KILLCOUNTER") == 0 && Functions.getAmount(p, rs.getInt("ITEMID")) < rs.getInt("GATHER")) {
+                	if(rs.getInt("VALUE") == 0 && rs.getInt("PLAYERTOKILL") == 0 && rs.getInt("KILLCOUNTER") == 0 && Functions.getMaterialAmount(p, Material.getMaterial(rs.getString("ITEM"))) < rs.getInt("GATHER")) {
 						String[] questext = rs.getString("QUESTTEXT").split("\\|", -1);
 						ArrayList<String> lorelist = new ArrayList<>();
 						
@@ -124,7 +123,7 @@ public class QuestInvCommand implements CommandExecutor {
 						for (String name : questext) {
 							lorelist.add(name);
 						}
-						lorelist.add("§eFortschritt: " + Functions.getAmount(p, rs.getInt("ITEMID")) + "/"  + rs.getInt("GATHER"));
+						lorelist.add("§eFortschritt: " + Functions.getMaterialAmount(p, Material.getMaterial(rs.getString("ITEM"))) + "/"  + rs.getInt("GATHER"));
 						lorelist.add("");
 						lorelist.add("§aBelohnung: §e" + sql.getReward(rs.getInt("QUESTID")) + " §aUnique Coins");
 						
@@ -133,7 +132,7 @@ public class QuestInvCommand implements CommandExecutor {
 						itemmeta.setLore(lorelist);
 						s.setItemMeta(itemmeta);
 						
-                	}else if(rs.getInt("VALUE") == 0 && rs.getInt("PLAYERTOKILL") == 0 && rs.getInt("KILLCOUNTER") == 0 && Functions.getAmount(p, rs.getInt("ITEMID")) >= rs.getInt("GATHER")) {
+                	}else if(rs.getInt("VALUE") == 0 && rs.getInt("PLAYERTOKILL") == 0 && rs.getInt("KILLCOUNTER") == 0 && Functions.getMaterialAmount(p, Material.getMaterial(rs.getString("ITEM"))) >= rs.getInt("GATHER")) {
                 		
 						String[] questext = rs.getString("QUESTTEXT").split("\\|", -1);
 						ArrayList<String> lorelist = new ArrayList<>();

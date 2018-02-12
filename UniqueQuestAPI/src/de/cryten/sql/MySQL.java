@@ -95,7 +95,7 @@ public class MySQL {
 		return tokens;
 	}
 	
-	public int getItemID(int questid) {
+	/*public int getItemID(int questid) {
 		int itemid = 0;
 		try(StatementResult statementResult = MySQLTables.quests.get(new String[]{"ITEMID"}, new String[]{"QUESTID"}, new Object[]{questid})) {
             ResultSet result = statementResult.receive();
@@ -104,6 +104,19 @@ public class MySQL {
             }
         } catch (Exception e) {}
 		return itemid;
+	}*/
+	
+	public Material getMaterialName(int questid) {
+		Material item = null;
+		System.out.println("IDs: " + questid);
+		try(StatementResult statementResult = MySQLTables.quests.get(new String[]{"ITEM"}, new String[]{"QUESTID"}, new Object[]{questid})) {
+            ResultSet result = statementResult.receive();
+            while(result.next()) {
+            	item = Material.getMaterial(result.getString("ITEM"));
+            }
+        } catch (Exception e) {}		
+		
+		return item;
 	}
 	
 	public void getQuestID(UUID uuid) {
