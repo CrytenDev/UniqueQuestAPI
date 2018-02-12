@@ -55,7 +55,7 @@ public class MySQLTables {
         
         coins = new MysqlTable(connectionPool, "Coins",
                 new Column("UUID", ColumnType.VARCHAR, 64),
-                new Column("TOKENS", ColumnType.INT, 20));
+                new Column("Coins", ColumnType.INT, 20));
         
         itemreward = new MysqlTable(connectionPool, "Itemreward",
                 new Column("UUID", ColumnType.VARCHAR, 64),
