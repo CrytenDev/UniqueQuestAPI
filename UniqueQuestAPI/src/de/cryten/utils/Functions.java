@@ -10,7 +10,8 @@ public class Functions {
 	
 	
     /**
-     * Get amount of items in player inventory.
+     * Get amount of items in player inventory. 
+     * -> Remove in the future! Use -> getMaterialAmount
      */
 	@SuppressWarnings("deprecation")
 	public static int getAmount(Player p, int itemid) {
@@ -25,18 +26,18 @@ public class Functions {
 		return counter;
 	}
 	
-	//Neue Methode ohne TypeID dafür mit Material Grund: Deprecated function -> getTypeId
+    /**
+     * Get amount of items by Material in player inventory. 
+     */
 	public static int getMaterialAmount(Player p, Material material) {
 		PlayerInventory inv = p.getInventory();
 		ItemStack[] items = inv.getContents();
 		int counter = 0;
-		
 		for(ItemStack item : items) {
 			if(item != null && (item.getType() == material) && (item.getAmount() > 0)) {
 				counter += item.getAmount();
 			}
 		}		
 		return counter;
-		
 	}
 }
