@@ -6,4 +6,4 @@ main: de.cryten.MainClass
 commands:
   quest:
   questtimer:
-  playtime:
+  played: 

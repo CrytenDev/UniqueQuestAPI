@@ -60,8 +60,6 @@ public class QuestInvCommand implements CommandExecutor {
 						console.sendMessage("§cMySQL Fehler -> ITEMSHORT: §4" + e.getMessage());
 					}
 					
-					
-					s.setDurability((short) 0);
                 	if(rs.getInt("VALUE") == 0 && rs.getInt("GATHER") == 0 && rs.getInt("PLAYERTOKILL") == 0 && rs.getInt("KILLTRACKER") < rs.getInt("KILLCOUNTER")) {
 						String[] questext = rs.getString("QUESTTEXT").split("\\|", -1);
 						ArrayList<String> lorelist = new ArrayList<>();
@@ -214,17 +212,16 @@ public class QuestInvCommand implements CommandExecutor {
 	}
 	
 	public ItemStack stack(String Display, Material m, String lores, String string, int Anzahl, short Shorts) {
-		ItemStack istack52 = new ItemStack(m, Anzahl, Shorts);
-		ItemMeta istackMeta52 = istack52.getItemMeta();
-		istackMeta52.setDisplayName(Display);
+		ItemStack istack = new ItemStack(m, Anzahl, Shorts);
+		ItemMeta istackMeta = istack.getItemMeta();
+		istackMeta.setDisplayName(Display);
 		if (!lores.equalsIgnoreCase("")) {
 			List<String> lore = new ArrayList<String>();
 			lore.add(lores);
 			lore.add(string);
-
-			istackMeta52.setLore(lore);
+			istackMeta.setLore(lore);
 		}
-		istack52.setItemMeta(istackMeta52);
-		return istack52;
+		istack.setItemMeta(istackMeta);
+		return istack;
 	}
 }

@@ -29,6 +29,7 @@ public class MainClass extends JavaPlugin {
 	
 	public void onEnable() {
 		instance = this;
+		cp.start();
 		if (!file.exists()) {
 		    getLogger().info("config.yml not found, creating!");
 		    saveDefaultConfig();
@@ -38,8 +39,7 @@ public class MainClass extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new QuestListeners(), this);
 		this.getCommand("quest").setExecutor(new QuestInvCommand());
 		this.getCommand("questtimer").setExecutor(new QuestTimerCommand());
-		this.getCommand("playtime").setExecutor(new QuestPlaytimeCommand());
-		cp.start();
+		this.getCommand("played").setExecutor(new QuestPlaytimeCommand());
 		MySQLTables.connectMySQL();
 		MySQLTables.loadTable();
 		qs.start();
