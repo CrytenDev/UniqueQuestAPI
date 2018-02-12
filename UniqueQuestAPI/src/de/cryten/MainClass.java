@@ -16,13 +16,13 @@ import de.cryten.utils.QuestTimer;
 
 public class MainClass extends JavaPlugin {
 	
-	ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 	private static MainClass instance;
+	
+	ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+	File file = new File(getDataFolder(), "config.yml");
 	ClassPath cp = new ClassPath();
 	QuestTimer qs = new QuestTimer();
-	
 	PlayerTimer ptimer = new PlayerTimer();
-	File file = new File(getDataFolder(), "config.yml");
 	
 	public static MainClass getInstance() {
 		return instance;
@@ -36,11 +36,11 @@ public class MainClass extends JavaPlugin {
 		} else {
 		    getLogger().info("config.yml found, loading!");
 		}
-		cp.start();
 		Bukkit.getPluginManager().registerEvents(new QuestListeners(), this);
 		this.getCommand("quest").setExecutor(new QuestInvCommand());
 		this.getCommand("questtimer").setExecutor(new QuestTimerCommand());
 		this.getCommand("playtime").setExecutor(new QuestPlaytimeCommand());
+		cp.start();
 		MySQLTables.connectMySQL();
 		MySQLTables.loadTable();
 		qs.start();
