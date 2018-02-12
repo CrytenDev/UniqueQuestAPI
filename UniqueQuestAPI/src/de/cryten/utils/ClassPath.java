@@ -7,27 +7,15 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.ConsoleCommandSender;
 
 import de.cryten.MainClass;
 
-public class ClassPath {
+public class ClassPath extends Thread {
+	ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 	
-	public static void addClassPath(final URL url) throws IOException {
-        final URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-        final Class<URLClassLoader> sysclass = URLClassLoader.class;
-        try {
-            final Method method = sysclass.getDeclaredMethod("addURL",
-                    new Class[] { URL.class });
-            method.setAccessible(true);
-            method.invoke(sysloader, new Object[] { url });
-        } catch (final Throwable t) {
-            t.printStackTrace();
-            throw new IOException("Error " + url + "");
-        }
-    }
-	
-	public static void checkLibs() {
-		
+	public void run() {
+		console.sendMessage("§aClassPath Thread started!");
         try {
             final File[] libs = new File[] {
                     new File(MainClass.getInstance().getDataFolder(), "guava-19.0.jar"),
@@ -49,7 +37,20 @@ public class ClassPath {
         } catch (final Exception e) {
             e.printStackTrace();
         }
+		
 	}
 	
-	
+	public static void addClassPath(final URL url) throws IOException {
+        final URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+        final Class<URLClassLoader> sysclass = URLClassLoader.class;
+        try {
+            final Method method = sysclass.getDeclaredMethod("addURL",
+                    new Class[] { URL.class });
+            method.setAccessible(true);
+            method.invoke(sysloader, new Object[] { url });
+        } catch (final Throwable t) {
+            t.printStackTrace();
+            throw new IOException("Error " + url + "");
+        }
+    }	
 }

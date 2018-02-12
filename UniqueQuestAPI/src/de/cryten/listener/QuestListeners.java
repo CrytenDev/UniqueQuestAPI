@@ -16,26 +16,31 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import de.cryten.MainClass;
-import de.cryten.command.QuestCommand;
+import de.cryten.command.QuestInvCommand;
 import de.cryten.sql.MySQL;
-import de.cryten.utils.ActionBar;
 import de.cryten.utils.Functions;
 
 @SuppressWarnings("deprecation")
 public class QuestListeners implements Listener {
 	
 	MySQL sql = new MySQL();
+	QuestInvCommand qc = new QuestInvCommand();
 	
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
-		MySQL.getQuests(p, p.getUniqueId());
+		sql.getQuests(p, p.getUniqueId());
 		e.setJoinMessage(null);
+		if (sql.getActiveReward(p.getUniqueId()) == 1) {
+			ItemStack test = new ItemStack(sql.getItemsfromReward(p.getUniqueId()));
+			p.getInventory().addItem(test);
+			sql.setActiveReward(p.getUniqueId(), 0);
+		}
 		if(sql.questid.size() <= 0){
 			sql.getQuestID(p.getUniqueId());
 		}
+
 	}
 	
 	@EventHandler
@@ -51,7 +56,7 @@ public class QuestListeners implements Listener {
 		if (item == null || item.getType() == null || item.getType() == Material.AIR)
 			return;
 
-		if (QuestCommand.inv != null && e.getInventory().getName().equals(QuestCommand.inv.getName())) {
+		if (QuestInvCommand.inv != null && e.getInventory().getName().equals(QuestInvCommand.inv.getName())) {
 			e.setCancelled(true);
 		}
 	}
@@ -73,7 +78,7 @@ public class QuestListeners implements Listener {
 					sql.setProgress(p.getUniqueId(), i);
 				
 					p.sendMessage("§l§6Quest: §2" + sql.getQuestName(i) + " §6- §2" + sql.getProgress(p.getUniqueId(), i) + "/" + sql.getValue(i));
-					ActionBar.sendActionText(p, "§l§6Quest: §2" + sql.getQuestName(i) + " §6- §2" + sql.getProgress(p.getUniqueId(), i) + "/" + sql.getValue(i), 3);
+					//sendActionText(p, "§l§6Quest: §2" + sql.getQuestName(i) + " §6- §2" + sql.getProgress(p.getUniqueId(), i) + "/" + sql.getValue(i), 3);
 					
 					if(sql.getProgress(p.getUniqueId(), i) == sql.getValue(i)) {
 						p.sendMessage("§k123§r §6Quest: §2" + sql.getQuestName(i) + " §6- Abgeschlossen §f§k123");
@@ -81,7 +86,7 @@ public class QuestListeners implements Listener {
 						//UniqueQuestActionBar.sendActionText(p, "§l§6Quest: §2" + sql.getQuestName(i) + " §6- Abgeschlossen | Belohnung: §2" + sql.getReward(i) + "§6 Unique Coins");
 						p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
 						
-						sql.addTokens(p.getUniqueId(), sql.getReward(i));
+						sql.addCoins(p.getUniqueId(), sql.getReward(i));
 					}
 				}
 
@@ -110,7 +115,7 @@ public class QuestListeners implements Listener {
 						if(Functions.getAmount(p, itemid) < sql.getGather(i) && sql.getGather(i) != 0) {
 							
 							p.sendMessage("§l§6Quest: §2" + sql.getQuestName(i) + " §6- §2" + Functions.getAmount(p, itemid) + "/" + sql.getGather(i));
-							ActionBar.sendActionText(p, "§l§6Quest: §2" + sql.getQuestName(i) + " §6- §2" + Functions.getAmount(p, itemid) + "/" + sql.getGather(i), 3);
+							//sendActionText(p, "§l§6Quest: §2" + sql.getQuestName(i) + " §6- §2" + Functions.getAmount(p, itemid) + "/" + sql.getGather(i), 3);
 						}
 						if(Functions.getAmount(p, itemid) == sql.getGather(i) && sql.getGather(i) != 0) {
 							sql.setGather(p.getUniqueId(), i, Functions.getAmount(p, itemid));
@@ -120,7 +125,7 @@ public class QuestListeners implements Listener {
 							//UniqueQuestActionBar.sendActionText(p, "§l§6Quest: §2" + sql.getQuestName(i) + " §6- Abgeschlossen | Belohnung: §2" + sql.getReward(i) + " §6Unique Coins");
 							p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
 							
-							sql.addTokens(p.getUniqueId(), sql.getReward(i));
+							sql.addCoins(p.getUniqueId(), sql.getReward(i));
 						}
 					}
 				}
@@ -156,7 +161,7 @@ public class QuestListeners implements Listener {
 						//UniqueQuestActionBar.sendActionText(p, "§l§6Quest: §2" + sql.getQuestName(i) + " §6- Abgeschlossen | Belohnung: §2" + sql.getReward(i) + " §6Unique Coins");
 						p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
 						
-						sql.addTokens(p.getUniqueId(), sql.getReward(i));
+						sql.addCoins(p.getUniqueId(), sql.getReward(i));
 					}
 				}				
 			}
@@ -171,7 +176,7 @@ public class QuestListeners implements Listener {
 							
 							sql.setKillProgress(p.getUniqueId(), i);
 							p.sendMessage("§l§6Quest: §2" + sql.getQuestName(i) + " §6- §6" + sql.getKillProgress(p.getUniqueId(), i) + "/" + sql.getKillCounter(i));
-							ActionBar.sendActionText(p, "§l§6Quest: §2" + sql.getQuestName(i) + " §6- §e" + sql.getKillProgress(p.getUniqueId(), i) + "/" + sql.getKillCounter(i), 3);
+							//ActionBar.sendActionText(p, "§l§6Quest: §2" + sql.getQuestName(i) + " §6- §e" + sql.getKillProgress(p.getUniqueId(), i) + "/" + sql.getKillCounter(i), 3);
 							
 						}
 						if(sql.getKillProgress(p.getUniqueId(), i) == sql.getKillCounter(i) && sql.getKillCounter(i) != 0) {
@@ -181,7 +186,7 @@ public class QuestListeners implements Listener {
 							//UniqueQuestActionBar.sendActionText(p, "§l§6Quest: §2" + sql.getQuestName(i) + " §6- Abgeschlossen | Belohnung: §2" + sql.getReward(i) + " §6Unique Coins");
 							p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
 							
-							sql.addTokens(p.getUniqueId(), sql.getReward(i));
+							sql.addCoins(p.getUniqueId(), sql.getReward(i));
 						}
 					}
 				}

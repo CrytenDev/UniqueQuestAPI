@@ -10,23 +10,18 @@ import java.util.concurrent.TimeUnit;
 import org.bukkit.entity.Player;
 
 public class ActionBar {
-	static Timer timer = new Timer();
-	static int count = 0;
-	
+
     /**
      * Send Actionbar to Player.
      */
-	public static void sendActionText(Player p, String message, int seconds){
-
+	public void sendActionText(Player p, String message, int seconds){
+		Timer timer = new Timer();
+		
 		timer.schedule(new TimerTask() {
 
 			@Override
 			public void run() {
-				count++;
 				p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new ComponentBuilder(message).create());
-				if(count == seconds) {
-					timer.cancel();
-				}
 			}
 			
 		}, TimeUnit.SECONDS.toMillis(1), TimeUnit.SECONDS.toMillis(1));

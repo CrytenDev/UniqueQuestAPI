@@ -14,7 +14,6 @@ import org.bukkit.command.ConsoleCommandSender;
  * This class is responsible for the connection. HikariCP plays an important role in this, as it provides a connection
  * pool. More informations about HikariCP can be found here https://github.com/brettwooldridge/HikariCP.
  *
- * @author Florian Heitzmann
  */
 public class ConnectionPool {
     private final String hostname, database, username, password;
@@ -82,7 +81,6 @@ public class ConnectionPool {
             this.source = new HikariDataSource(config);
         } catch(Exception e) {
         	console.sendMessage("§cHikariCP: Wrong login data or mysql server configurations.");
-            e.printStackTrace();
         }
 
         if(!this.source.isClosed()) {

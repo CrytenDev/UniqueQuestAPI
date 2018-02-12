@@ -12,38 +12,22 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
 import de.cryten.sql.MySQL;
+import de.cryten.sql.MySQLTables;
 import de.cryten.utils.Functions;
 
-public class QuestCommand implements CommandExecutor {
-	
-	public static ItemStack stack(String Display, Material m, String lores, String string, int Anzahl, short Shorts) {
-		ItemStack istack52 = new ItemStack(m, Anzahl, Shorts);
-		ItemMeta istackMeta52 = istack52.getItemMeta();
-		istackMeta52.setDisplayName(Display);
-		if (!lores.equalsIgnoreCase("")) {
-			List<String> lore = new ArrayList<String>();
-			lore.add(lores);
-			lore.add(string);
-
-			istackMeta52.setLore(lore);
-		}
-		istack52.setItemMeta(istackMeta52);
-		return istack52;
-	}
-
+public class QuestInvCommand implements CommandExecutor {
+	MySQL sql = new MySQL();
 	public static Inventory inv;
+	int size = 0;
+	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-
-		int size = 0;
-		MySQL sql = new MySQL();
 		
         if (sender instanceof Player) {
             Player p = (Player) sender;
           
-            inv = Bukkit.createInventory(null, 27, "§2Questlog - Unique Coins: " + sql.getTokens(p.getUniqueId()));
+            inv = Bukkit.createInventory(null, 27, "§2Questlog");
     		
     		for(int i = 0; i < inv.getSize(); i++) {
     			
@@ -52,8 +36,7 @@ public class QuestCommand implements CommandExecutor {
     			}
     		}
     		
-    		
-			try(ResultSet rs = MySQL.connectionPool.getConnection().createStatement().executeQuery(
+			try(ResultSet rs = MySQLTables.connectionPool.getConnection().createStatement().executeQuery(
     				"SELECT * FROM Quests "
     				+ "LEFT JOIN Questtracker "
     				+ "ON Quests.QUESTID = Questtracker.QUESTID "
@@ -63,8 +46,7 @@ public class QuestCommand implements CommandExecutor {
 	            while(rs.next()) {
                 	@SuppressWarnings("deprecation")
 					ItemStack s = new ItemStack(Material.getMaterial(sql.getItemID(rs.getInt("QUESTID"))));
-					
-                	//MOB KILL
+
                 	if(rs.getInt("VALUE") == 0 && rs.getInt("GATHER") == 0 && rs.getInt("PLAYERTOKILL") == 0 && rs.getInt("KILLTRACKER") < rs.getInt("KILLCOUNTER")) {
 						String[] questext = rs.getString("QUESTTEXT").split("\\|", -1);
 						ArrayList<String> lorelist = new ArrayList<>();
@@ -99,8 +81,7 @@ public class QuestCommand implements CommandExecutor {
 						itemmeta.setLore(lorelist);
 						s.setItemMeta(itemmeta);
                 	}
-                	
-                	//Kill Player
+
                 	if(rs.getInt("VALUE") == 0 && rs.getInt("GATHER") == 0 && rs.getInt("KILLCOUNTER") == 0 && rs.getInt("PLAYERTRACKER") < rs.getInt("PLAYERTOKILL")) {
 						String[] questext = rs.getString("QUESTTEXT").split("\\|", -1);
 						ArrayList<String> lorelist = new ArrayList<>();
@@ -135,9 +116,6 @@ public class QuestCommand implements CommandExecutor {
 						s.setItemMeta(itemmeta);
                 	}
                 	
-                	
-                	
-                	//Sammel Items
                 	if(rs.getInt("VALUE") == 0 && rs.getInt("PLAYERTOKILL") == 0 && rs.getInt("KILLCOUNTER") == 0 && Functions.getAmount(p, rs.getInt("ITEMID")) < rs.getInt("GATHER")) {
 						String[] questext = rs.getString("QUESTTEXT").split("\\|", -1);
 						ArrayList<String> lorelist = new ArrayList<>();
@@ -174,7 +152,6 @@ public class QuestCommand implements CommandExecutor {
 						s.setItemMeta(itemmeta);
                 	}
                 	
-                	//Baue items ab ...
                 	if(rs.getInt("GATHER") == 0 && rs.getInt("PLAYERTOKILL") == 0 && rs.getInt("KILLCOUNTER") == 0 && rs.getInt("QUESTTRACKER") < rs.getInt("VALUE")) {
 						String[] questext = rs.getString("QUESTTEXT").split("\\|", -1);
 						ArrayList<String> lorelist = new ArrayList<>();
@@ -221,5 +198,20 @@ public class QuestCommand implements CommandExecutor {
 		
 		
 		return false;
+	}
+	
+	public ItemStack stack(String Display, Material m, String lores, String string, int Anzahl, short Shorts) {
+		ItemStack istack52 = new ItemStack(m, Anzahl, Shorts);
+		ItemMeta istackMeta52 = istack52.getItemMeta();
+		istackMeta52.setDisplayName(Display);
+		if (!lores.equalsIgnoreCase("")) {
+			List<String> lore = new ArrayList<String>();
+			lore.add(lores);
+			lore.add(string);
+
+			istackMeta52.setLore(lore);
+		}
+		istack52.setItemMeta(istackMeta52);
+		return istack52;
 	}
 }

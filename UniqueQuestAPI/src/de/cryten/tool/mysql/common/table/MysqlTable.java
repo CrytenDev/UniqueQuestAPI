@@ -12,7 +12,6 @@ import java.sql.SQLException;
 /**
  * This class allows working with the mysql without syntax knowledge.
  *
- * @author Florian Heitzmann
  */
 public class MysqlTable {
     private final ConnectionPool connectionPool;

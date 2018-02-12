@@ -8,7 +8,6 @@ import java.sql.SQLException;
 /**
  * This class returns the result of the statement. It is important to use the {@link #close()} method at the end.
  *
- * @author Florian Heitzmann
  */
 public class StatementResult implements AutoCloseable {
     private final Connection connection;

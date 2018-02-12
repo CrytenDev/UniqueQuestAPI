@@ -3,7 +3,6 @@ package de.cryten.tool.mysql.common.table.column;
 /**
  * A collection of all suitable types.
  *
- * @author Florian Heitzmann
  */
 public enum ColumnType {
 
@@ -101,25 +100,25 @@ public enum ColumnType {
     VARCHAR,
 
     /**
-     * A TEXT column with a maximum length of 255 (28 ��� 1) characters. The effective maximum length is less if the value
+     * A TEXT column with a maximum length of 255 characters. The effective maximum length is less if the value
      * contains multibyte characters.
      */
     TINYTEXT,
 
     /**
-     * A TEXT column with a maximum length of 65,535 (216 ��� 1) characters. The effective maximum length is less if the
+     * A TEXT column with a maximum length of 65,535 characters. The effective maximum length is less if the
      * value contains multibyte characters.
      */
     TEXT,
 
     /**
-     * A TEXT column with a maximum length of 16,777,215 (224 ��� 1) characters. The effective maximum length is less if
+     * A TEXT column with a maximum length of 16,777,215 characters. The effective maximum length is less if
      * the value contains multibyte characters.
      */
     MEDIUMTEXT,
 
     /**
-     * A TEXT column with a maximum length of 4,294,967,295 or 4GB (232 ��� 1) characters. The effective maximum length is
+     * A TEXT column with a maximum length of 4,294,967,295 or 4GB characters. The effective maximum length is
      * less if the value contains multibyte characters. The effective maximum length of LONGTEXT columns also depends on
      * the configured maximum packet size in the client/server protocol and available memory.
      */

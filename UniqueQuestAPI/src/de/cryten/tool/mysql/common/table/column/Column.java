@@ -3,7 +3,6 @@ package de.cryten.tool.mysql.common.table.column;
 /**
  * This class forms a table column.
  *
- * @author Florian Heitzmann
  */
 public class Column {
     private final String field;
