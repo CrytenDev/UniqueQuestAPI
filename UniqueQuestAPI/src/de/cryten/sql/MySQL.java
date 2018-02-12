@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+
 import de.cryten.tool.mysql.common.StatementResult;
 
 public class MySQL {
@@ -96,16 +97,17 @@ public class MySQL {
 	}
 	
 	public Material getMaterialName(int questid) {
-		Material item = null;
+		Material material = null;
 		System.out.println("IDs: " + questid);
 		try(StatementResult statementResult = MySQLTables.quests.get(new String[]{"ITEM"}, new String[]{"QUESTID"}, new Object[]{questid})) {
             ResultSet result = statementResult.receive();
             while(result.next()) {
-            	item = Material.getMaterial(result.getString("ITEM"));
+            	material = Material.getMaterial(result.getString("ITEM"));
+
             }
         } catch (Exception e) {}		
 		
-		return item;
+		return material;
 	}
 	
 	public void getQuestID(UUID uuid) {

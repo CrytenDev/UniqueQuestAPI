@@ -8,15 +8,18 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import de.cryten.sql.MySQL;
 import de.cryten.sql.MySQLTables;
+import de.cryten.tool.mysql.common.StatementResult;
 import de.cryten.utils.Functions;
 
 public class QuestInvCommand implements CommandExecutor {
+	ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 	MySQL sql = new MySQL();
 	public static Inventory inv;
 	int size = 0;
@@ -45,7 +48,20 @@ public class QuestInvCommand implements CommandExecutor {
 				
 	            while(rs.next()) {
 					ItemStack s = new ItemStack(sql.getMaterialName(rs.getInt("QUESTID")));
-
+					
+					try(StatementResult statement = MySQLTables.quests.get(new String[]{"ITEMSHORT"}, new String[]{"QUESTID"}, new Object[]{""+rs.getInt("QUESTID")+""})){
+						ResultSet result = statement.receive();
+						if(result.next()) {
+							if(result.getInt("ITEMSHORT") != 0){
+								s.setDurability((short) result.getInt("ITEMSHORT"));
+							}
+						}
+					}catch(Exception e){
+						console.sendMessage("§cMySQL Fehler -> ITEMSHORT: §4" + e.getMessage());
+					}
+					
+					
+					s.setDurability((short) 0);
                 	if(rs.getInt("VALUE") == 0 && rs.getInt("GATHER") == 0 && rs.getInt("PLAYERTOKILL") == 0 && rs.getInt("KILLTRACKER") < rs.getInt("KILLCOUNTER")) {
 						String[] questext = rs.getString("QUESTTEXT").split("\\|", -1);
 						ArrayList<String> lorelist = new ArrayList<>();
@@ -184,18 +200,16 @@ public class QuestInvCommand implements CommandExecutor {
 						itemmeta.setLore(lorelist);
 						s.setItemMeta(itemmeta);
                 	}
-
 					inv.setItem(size, s);
 					size++;
 	            }
 	            rs.close();
-	        } catch (Exception e) {}
-			
+	        } catch (Exception e) {
+	        	console.sendMessage("§cMySQL Fehler -> Quests: §4" + e.getMessage());
+	        }
     		size = 0;
     		p.openInventory(inv);
         }
-		
-		
 		return false;
 	}
 	

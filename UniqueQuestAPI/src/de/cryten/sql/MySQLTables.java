@@ -45,6 +45,7 @@ public class MySQLTables {
                  new Column("QUESTNAME", ColumnType.VARCHAR, 50),
                  new Column("QUESTTEXT", ColumnType.VARCHAR, 200),
                  new Column("ITEM", ColumnType.VARCHAR, 50),
+                 new Column("ITEMSHORT", ColumnType.INT, 11),
                  new Column("VALUE", ColumnType.INT, 11),
                  new Column("GATHER", ColumnType.INT, 50),
                  new Column("KILLCOUNTER", ColumnType.INT, 50),
