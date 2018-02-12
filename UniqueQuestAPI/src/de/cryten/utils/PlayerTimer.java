@@ -70,7 +70,11 @@ public class PlayerTimer extends Thread {
 	}
 	private void createPlayer(UUID uuid) {
 		try {
-			MySQLTables.connectionPool.getConnection().createStatement().executeUpdate("INSERT INTO Citytime (UUID, DAY, HOURS, MINUTES) VALUES ('"+uuid.toString()+"', '0', '0', '0');");
+			MySQLTables.connectionPool.getConnection().createStatement().executeUpdate(
+					"INSERT INTO Citytime "
+					+ "(UUID, DAY, HOURS, MINUTES) "
+					+ "VALUES "
+					+ "('"+uuid.toString()+"', '0', '0', '0');");
 		}catch(Exception e) {}
 	}
 }
